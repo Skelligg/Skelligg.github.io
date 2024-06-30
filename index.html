@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./scss/styles.css">
+        <title>Bulk Cutter</title>
+        <script src="./js/index-script.js" type="module"></script>
+    </head>
+    <body>
+
+        <header>
+            <div class="header-text">
+                <h1>Calorie Calculator</h2>
+            </div>
+        </header>
+
+        <main>
+            <div class="search-part">
+                <div class="search">
+
+                    <div class="row">
+                        <input placeholder="Add a food to your meal plan" type="text" class="search-bar">
+                    </div>
+
+
+                    <div class="result-box">
+
+                    </div>
+                
+                </div>
+                <p class="search-text">Press Enter for search results</p>
+            </div>  
+
+            <div class="added-foods">
+            
+            </div>
+
+            <div class="total">
+
+                <div class="wrapper total" id="total-wrapper">
+                    <div class="collapsible">
+                        <input type="checkbox" id="total-head">
+                        <label for="total-head">Total 
+                            <p id="total-calories">0 kCal</p>
+                            <img src = "./resources/arrow.png">
+                        </label>
+                        
+                        <div class="collapsible-text">
+                            <div class="weight">
+                                <h3>Nutrition</h3> 
+                                <p id="total-weight">0 g</p>
+                            </div>
+                            <div class="nutrition">
+                                <p id="total-carbs">Carbs: 0 g</p>
+                                <p id="total-fiber">Fiber: 0 g</p>
+                                <p id="total-sugars">Total Sugars: 0 g</p>
+                                <p id="total-energy">Energy: 0 kJ</p>
+                                <p id="total-fat">Fat: 0 g</p>
+                                <p id="total-protein">Protein: 0 g</p>
+                                <p id="total-cost">Cost: 0.00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    
+    </body>
+</html>
