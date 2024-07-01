@@ -153,14 +153,14 @@ async function fetchSearchResults(foodItem){
 
 function addFood(name){
 
-    let weight = nutrientData.totalWeight;
-    let caloriesPer100g = Number(nutrientData.totalNutrients.ENERC_KCAL.quantity.toFixed(2) / weight * 100).toFixed(0);
-    let carbsPer100g = (nutrientData.totalNutrients.CHOCDF.quantity.toFixed(2) / weight * 100).toFixed(2);
-    let fiberPer100g = (nutrientData.totalNutrients.FIBTG.quantity.toFixed(2) / weight * 100).toFixed(2);
-    let totalSugarsPer100g = (nutrientData.totalNutrients.SUGAR.quantity.toFixed(2) / weight * 100).toFixed(2);
-    let energyPer100g = (caloriesPer100g * 4.184).toFixed(2);
-    let fatPer100g = (nutrientData.totalNutrients.FAT.quantity.toFixed(2) / weight * 100).toFixed(2);
-    let proteinPer100g = (nutrientData.totalNutrients.PROCNT.quantity.toFixed(2) / weight * 100).toFixed(2);
+    let weight = nutrientData?.totalWeight ?? 0;
+let caloriesPer100g = Number((nutrientData?.totalNutrients?.ENERC_KCAL?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(0);
+let carbsPer100g = ((nutrientData?.totalNutrients?.CHOCDF?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
+let fiberPer100g = ((nutrientData?.totalNutrients?.FIBTG?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
+let totalSugarsPer100g = ((nutrientData?.totalNutrients?.SUGAR?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
+let energyPer100g = (caloriesPer100g * 4.184).toFixed(2);
+let fatPer100g = ((nutrientData?.totalNutrients?.FAT?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
+let proteinPer100g = ((nutrientData?.totalNutrients?.PROCNT?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
 
     // Create the wrapper div
     const wrapper = document.createElement('div');
@@ -391,7 +391,6 @@ $('.darkmode-checkbox').addEventListener('click', () => {
     
     const text = document.querySelectorAll(".darkerblue, .lighterblue");
     text.forEach(t => {
-        console.log(isDarkmode ? "dark" : "light");
         t.classList.toggle('darkerblue', !isDarkmode);
         t.classList.toggle('lighterblue', isDarkmode);
     });
