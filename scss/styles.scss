@@ -10,15 +10,18 @@ $font : Helvetica, Arial, sans-serif;
     font-family: $font;
 }
 
-body {
-    background: $background-color;
-    height:750px;
-}
-
 h1{
-    color: $main-blue;
+    font-size: 2.5rem;
     text-shadow: 0px 2px 2px rgba(0,0,0,0.1);
     margin: 5px;
+}
+
+.darkerblue{
+    color: $main-blue
+}
+
+.lighterblue{
+    color: #53a3ff;
 }
 
 .logo{
@@ -29,7 +32,7 @@ h1{
 }
 
 .header-text{
-    margin-top:50px;
+    margin-top:100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,7 +43,7 @@ h1{
 .search{
     width: 80vmin;
     border-radius: 5px;
-    margin: 100px auto 0;
+    margin: 50px auto 0;
     background-color: $main-grey;
 }
 
@@ -73,11 +76,10 @@ h1{
     width: 80vmin;
 }
 
-.search-text{
+.search-part > p{
     margin-right: auto;
-    font-size: rem;
-    color: $main-blue;
-    padding-top: 5px;
+    font-size: 0.9rem;
+    padding-top: 10px;
     padding-bottom: 15px;
     padding-left: 2px;
     display: flex;
@@ -209,8 +211,8 @@ h1{
     h3{
         font-size: 1.5rem;
         padding: 10px 10px;
+        flex:2;
         color: $main-blue;
-        flex:2
     }
 
 
@@ -301,6 +303,75 @@ input[type="number"] {
     }
 }
 
+body {
+    --bg: #fefff4;
+    margin: 0;
+    min-height: 150vh;
+    background: var(--bg);
+    transition: background 400ms ease;
+    
+    &.darkmode {
+      --bg: #252525;
+    }
+
+  }
+  
+  svg {
+    position: absolute;
+    width: 8vmin;
+    height: 8vmin;
+    right: 20px;
+    top: 10px;
+  }
+  
+  /** light mode */
+  
+  .darkmode-icon {
+    
+    .moon-shadow {
+      transition: cx 400ms ease;
+    }
+    
+    .rays {
+      transition: stroke-dashoffset 400ms ease;   
+      stroke-dashoffset: 20;
+      stroke-dasharray: 12;
+    }
+    
+    .sun {
+        fill: #FEFFF6;
+    }
+    
+    .moon-shadow {
+      fill: #252525;
+    }
+    
+    .rays, .sun-stroke {
+      stroke: #828282;
+      fill: none;
+    }
+  }
+  
+  /** dark mode */
+  
+  .darkmode-checkbox:checked ~ label {
+     cursor: pointer;
+   
+    .darkmode-icon {
+      .moon-shadow {
+        cx: 40;
+      }
+      
+      .rays {
+        stroke-dashoffset: 12;
+        stroke-dasharray: 12;
+      }
+    }  
+  }
+  
+  .darkmode-checkbox {
+    display: none;
+  }
 
 
 @media only screen and (max-width:801px){
@@ -325,4 +396,13 @@ input[type="number"] {
         outline: 0;
         padding-left: 4px;
     }
+
+    h1{
+        font-size: 2rem;
+    }
+
+    .search-part > p{
+        font-size: 0.8rem;
+    }
+
 }

@@ -9,9 +9,31 @@
     </head>
     <body>
 
+        <input class="darkmode-checkbox" id="darkMode" type="checkbox">
+<label for="darkMode">
+  <svg class="darkmode-icon" viewBox="0 0 64 64">
+    <clipPath id="sun">
+      <circle cx="32" cy="32" r="10"/>
+    </clipPath>
+    <circle class="sun" cx="32" cy="32" r="8" />
+    <circle class="moon-shadow" cx="60" cy="32" r="10" clip-path="url(#sun)" />
+    <circle class="sun-stroke" cx="32" cy="32" r="10" />
+    <g class="rays">
+    <path d="M 32,4 l0,12" />
+    <path d="M 32,4 l0,12" transform="rotate(45)" transform-origin="50% 50%" />
+    <path d="M 32,4 l0,12" transform="rotate(90)" transform-origin="50% 50%"/>
+    <path d="M 32,4 l0,12" transform="rotate(135)" transform-origin="50% 50%"/>
+    <path d="M 32,4 l0,12" transform="rotate(180)" transform-origin="50% 50%"/>
+    <path d="M 32,4 l0,12" transform="rotate(225)" transform-origin="50% 50%"/>
+    <path d="M 32,4 l0,12" transform="rotate(270)" transform-origin="50% 50%"/>
+    <path d="M 32,4 l0,12" transform="rotate(315)" transform-origin="50% 50%"/>
+    </g>
+  </svg>
+</label>
+
         <header>
             <div class="header-text">
-                <h1>Calorie Calculator</h2>
+                <h1 class="darkerblue">Calorie Calculator</h2>
             </div>
         </header>
 
@@ -29,7 +51,7 @@
                     </div>
                 
                 </div>
-                <p class="search-text">Press Enter for search results</p>
+                <p class="darkerblue">Press Enter for search results</p>
             </div>  
 
             <div class="added-foods">
@@ -48,7 +70,7 @@
                         
                         <div class="collapsible-text">
                             <div class="weight">
-                                <h3>Nutrition</h3> 
+                                <h3 darkerblue>Nutrition</h3> 
                                 <p id="total-weight">0 g</p>
                             </div>
                             <div class="nutrition">

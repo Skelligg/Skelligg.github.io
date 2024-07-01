@@ -5,15 +5,18 @@
   font-family: Helvetica, Arial, sans-serif;
 }
 
-body {
-  background: #FEFFF6;
-  height: 750px;
-}
-
 h1 {
-  color: #1281ff;
+  font-size: 2.5rem;
   text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
   margin: 5px;
+}
+
+.darkerblue {
+  color: #1281ff;
+}
+
+.lighterblue {
+  color: #53a3ff;
 }
 
 .logo {
@@ -24,7 +27,7 @@ h1 {
 }
 
 .header-text {
-  margin-top: 50px;
+  margin-top: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -35,7 +38,7 @@ h1 {
 .search {
   width: 80vmin;
   border-radius: 5px;
-  margin: 100px auto 0;
+  margin: 50px auto 0;
   background-color: #F4F4F4;
 }
 
@@ -68,11 +71,10 @@ h1 {
   width: 80vmin;
 }
 
-.search-text {
+.search-part > p {
   margin-right: auto;
-  font-size: rem;
-  color: #1281ff;
-  padding-top: 5px;
+  font-size: 0.9rem;
+  padding-top: 10px;
   padding-bottom: 15px;
   padding-left: 2px;
   display: flex;
@@ -189,8 +191,8 @@ h1 {
 .collapsible-text h3 {
   font-size: 1.5rem;
   padding: 10px 10px;
-  color: #1281ff;
   flex: 2;
+  color: #1281ff;
 }
 .collapsible-text .amount {
   padding: 5px;
@@ -273,6 +275,61 @@ input[type=number] {
   display: none;
 }
 
+body {
+  --bg: #fefff4;
+  margin: 0;
+  min-height: 150vh;
+  background: var(--bg);
+  transition: background 400ms ease;
+}
+body.darkmode {
+  --bg: #252525;
+}
+
+svg {
+  position: absolute;
+  width: 8vmin;
+  height: 8vmin;
+  right: 20px;
+  top: 10px;
+}
+
+/** light mode */
+.darkmode-icon .moon-shadow {
+  transition: cx 400ms ease;
+}
+.darkmode-icon .rays {
+  transition: stroke-dashoffset 400ms ease;
+  stroke-dashoffset: 20;
+  stroke-dasharray: 12;
+}
+.darkmode-icon .sun {
+  fill: #FEFFF6;
+}
+.darkmode-icon .moon-shadow {
+  fill: #252525;
+}
+.darkmode-icon .rays, .darkmode-icon .sun-stroke {
+  stroke: #828282;
+  fill: none;
+}
+
+/** dark mode */
+.darkmode-checkbox:checked ~ label {
+  cursor: pointer;
+}
+.darkmode-checkbox:checked ~ label .darkmode-icon .moon-shadow {
+  cx: 40;
+}
+.darkmode-checkbox:checked ~ label .darkmode-icon .rays {
+  stroke-dashoffset: 12;
+  stroke-dasharray: 12;
+}
+
+.darkmode-checkbox {
+  display: none;
+}
+
 @media only screen and (max-width: 801px) {
   .close {
     opacity: 1;
@@ -293,5 +350,11 @@ input[type=number] {
     border: 0;
     outline: 0;
     padding-left: 4px;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  .search-part > p {
+    font-size: 0.8rem;
   }
 }/*# sourceMappingURL=styles.css.map */
