@@ -118,12 +118,6 @@ h1 {
   overflow: hidden;
   font-weight: 500;
 }
-.collapsible #food-4 {
-  display: none;
-}
-.collapsible #collapsible-head2 {
-  display: none;
-}
 .collapsible label {
   position: relative;
   font-weight: 400;
@@ -213,7 +207,7 @@ h1 {
 }
 .collapsible-text .nutrition {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
   gap: 10px;
   padding: 10px;
   padding-bottom: 0;
@@ -265,11 +259,20 @@ input[type=number] {
 }
 
 .total {
-  margin-right: 15px;
+  margin-right: 17px;
   padding-top: 20px;
 }
 .total label {
   background-color: #c6c6c6;
+  position: relative;
+  font-weight: 400;
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 10px;
+  padding: 15px;
+  cursor: pointer;
+  border-radius: 4px;
+  z-index: 1;
 }
 .total #total-head {
   display: none;
@@ -330,12 +333,37 @@ svg {
   display: none;
 }
 
+.download {
+  display: block;
+  margin: auto;
+  margin-top: 20px;
+  width: 12vmin;
+  height: 3vmin;
+  min-height: 25px;
+  min-width: 75px;
+  border-radius: 4px;
+  border: none;
+  padding: 5px;
+  font-size: 0.9rem;
+  color: #1281ff;
+  background-color: #F4F4F4;
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.download:active {
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.3);
+}
+
 @media only screen and (max-width: 801px) {
   .close {
     opacity: 1;
     position: relative;
     right: 10px;
-    margin-top: 20px;
+    margin-top: 18px;
+    height: 15px;
+    width: 15px;
+    font-size: 0.7rem;
   }
   .search-bar {
     flex: 1;
@@ -356,5 +384,50 @@ svg {
   }
   .search-part > p {
     font-size: 0.8rem;
+  }
+  .download {
+    font-size: 0.8rem;
+  }
+  .collapsible label {
+    font-size: 1rem;
+  }
+  .collapsible label > p {
+    position: absolute;
+    right: 50px;
+    top: 15px;
+  }
+  .collapsible label img {
+    content: "";
+    position: absolute;
+    right: 15px;
+    top: 18px;
+    width: 14px;
+    height: 14px;
+    background: url("../resources/arrow.png") no-repeat 0 0;
+  }
+  .collapsible .collapsible-text .weight p {
+    font-size: 0.9rem;
+    margin-right: 10px;
+  }
+  .collapsible .collapsible-text h3 {
+    font-size: 1.2rem;
+  }
+  .collapsible .collapsible-text .nutrition {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 8px;
+    padding: 8px;
+    padding-bottom: 0;
+  }
+  .collapsible .collapsible-text .nutrition p {
+    font-size: 0.9rem;
+    margin: 0;
+    padding: 5px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    text-align: left;
+  }
+  .collapsible .collapsible-text .nutrition strong {
+    display: block;
   }
 }/*# sourceMappingURL=styles.css.map */

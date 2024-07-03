@@ -2,9 +2,37 @@
 const app_id = "e0854d27";
 const app_key = "ecc8bdb05ddbd3dbe828f0ee73c8c791"
 
-let result = [];
+const addedFoodsDiv = document.querySelector(".added-foods")
 let addedFoods = [];
 let addedFoodID = 0;
+
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
+getFoodsFromLocalStorage();
+
+async function getFoodsFromLocalStorage(){
+    let order = [];
+    let keys = [];
+
+    for(let i = 0; i < localStorage.length; i++){
+        order[i] = localStorage.getItem(localStorage.key(i));
+        keys[i] = localStorage.key(i);
+    }
+
+    for(let i = 0; i < order.length; i++){
+        let index = Number(order[i].slice(-1));
+        let value = order[i].slice(0,-1)
+
+        let id = Number(keys[i].slice(-1))
+        if( id > addedFoodID){
+            addedFoodID = id
+        }
+        fetchSearchResults(value, index, "stored")
+        await delay(500);
+    }
+}
+
+let result = [];
 let data;
 let nutrientData;
 
@@ -12,12 +40,11 @@ let buttons = document.querySelectorAll(".close")
 let wrappers = document.querySelectorAll(".wrapper")
 const search = document.querySelector(".search-bar")
 const resultBox = document.querySelector(".result-box")
-const addedFoodsDiv = document.querySelector(".added-foods")
 
-//fetchNutrients();
 init()
 
 function init(){
+    calculateTotal();
     search.addEventListener("keypress", searchResults)
     document.addEventListener('mousemove', showButton)
     for(let button of buttons){
@@ -27,12 +54,14 @@ function init(){
     document.addEventListener('DOMContentLoaded', calculateTotal);
 }
 
+
 function removeWrapper(e){
     let targetWrapperID = e.target.getAttribute("for")
     let targetWrapper = document.querySelector(`#${targetWrapperID}`)
     let index = addedFoods.indexOf(targetWrapper)
     addedFoods.splice(index,1);
     targetWrapper.remove();
+    localStorage.removeItem(targetWrapperID);
     calculateTotal();
 }
 
@@ -63,10 +92,10 @@ function searchResults(e){
     }
 }
 
-async function fetchNutrients(name,index){
+async function fetchNutrients(fullName, searchInput, index, lS){
     const nutrientURL = "https://api.edamam.com/api/food-database/v2/nutrients?app_id=e0854d27&app_key=ecc8bdb05ddbd3dbe828f0ee73c8c791";
 
-    const parserURL = `https://api.edamam.com/api/food-database/v2/parser?app_id=${app_id}&app_key=${app_key}&ingr=${name}`;
+    const parserURL = `https://api.edamam.com/api/food-database/v2/parser?app_id=${app_id}&app_key=${app_key}&ingr=${fullName}`;
     
     const response = await fetch(parserURL)
     if (!response.ok) {
@@ -75,6 +104,7 @@ async function fetchNutrients(name,index){
 
     data = await response.json();
 
+    let foodName = data.hints[index].food.label;
     let foodID = data.hints[index].food.foodId;
     let measureURI = data.hints[index].measures[0].uri;
 
@@ -99,12 +129,14 @@ async function fetchNutrients(name,index){
         
         })
         if(!response.ok){
+            // add error on screen
             throw new Error('Network response was not ok ' + response.statusText);
+        
           }
 
         nutrientData = await response.json();
-        //console.log(nutrientData)
-        addFood(data.hints[index].food.label);
+        addFood(foodName, searchInput, index, lS);
+
     }
     catch(error){
         console.log(error)
@@ -113,7 +145,7 @@ async function fetchNutrients(name,index){
     
 }
 
-async function fetchSearchResults(foodItem){
+async function fetchSearchResults(foodItem, index, lS){
     const parserURL = `https://api.edamam.com/api/food-database/v2/parser?app_id=${app_id}&app_key=${app_key}&ingr=${foodItem}`;
     try{
         const response = await fetch(parserURL)
@@ -123,7 +155,6 @@ async function fetchSearchResults(foodItem){
           }
 
         data = await response.json();
-        //console.log(data)
 
         result = [];
 
@@ -132,18 +163,21 @@ async function fetchSearchResults(foodItem){
                 result[i] = data.hints[i].food.label;
             }
         }
-
-        const content = result.map((list) =>{
-            return "<li>" + list + "</li>"
-        });
-    
-        resultBox.innerHTML = "<ul>" + content.join('') + "</ul>"
-
-        let searchResults = document.querySelectorAll("li");
-        for(let i = 0; i < searchResults.length; i++){
-            searchResults[i].addEventListener("click",function() { fetchNutrients(search.value,i)})
+        if(lS){
+            fetchNutrients(result[index], foodItem, index, lS)
         }
+        else{
+            const content = result.map((list) =>{
+                return "<li>" + list + "</li>"
+            });
         
+            resultBox.innerHTML = "<ul>" + content.join('') + "</ul>"
+    
+            let searchResults = document.querySelectorAll("li");
+            for(let i = 0; i < searchResults.length; i++){
+                searchResults[i].addEventListener("click",function() { fetchNutrients(search.value, foodItem, i)})
+            }
+        }    
     }
     catch(error){
         console.error(error)
@@ -151,21 +185,42 @@ async function fetchSearchResults(foodItem){
 
 }
 
-function addFood(name){
+function addFood(name, searchInput, index, lS){
 
     let weight = nutrientData?.totalWeight ?? 0;
-let caloriesPer100g = Number((nutrientData?.totalNutrients?.ENERC_KCAL?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(0);
-let carbsPer100g = ((nutrientData?.totalNutrients?.CHOCDF?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
-let fiberPer100g = ((nutrientData?.totalNutrients?.FIBTG?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
-let totalSugarsPer100g = ((nutrientData?.totalNutrients?.SUGAR?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
-let energyPer100g = (caloriesPer100g * 4.184).toFixed(2);
-let fatPer100g = ((nutrientData?.totalNutrients?.FAT?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
-let proteinPer100g = ((nutrientData?.totalNutrients?.PROCNT?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
+    let caloriesPer100g = Number((nutrientData?.totalNutrients?.ENERC_KCAL?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(0);
+    let carbsPer100g = ((nutrientData?.totalNutrients?.CHOCDF?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
+    let fiberPer100g = ((nutrientData?.totalNutrients?.FIBTG?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
+    let totalSugarsPer100g = ((nutrientData?.totalNutrients?.SUGAR?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
+    let energyPer100g = (caloriesPer100g * 4.184).toFixed(2);
+    let fatPer100g = ((nutrientData?.totalNutrients?.FAT?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
+    let proteinPer100g = ((nutrientData?.totalNutrients?.PROCNT?.quantity?.toFixed(2) ?? 0) / weight * 100).toFixed(2);
+
+    let newFoodID = "";
 
     // Create the wrapper div
     const wrapper = document.createElement('div');
     wrapper.className = 'wrapper';
-    wrapper.id = `wrapper-${addedFoodID}`;
+    if(lS){
+        let compareValue = searchInput + index
+        for (let i = 0; i < localStorage.length; i++) {
+            if(localStorage.getItem(localStorage.key(i)) == compareValue){
+                wrapper.id = `${localStorage.key(i)}`;
+                newFoodID = `${localStorage.key(i)}`;
+            }
+        }
+    }
+    else if(localStorage.getItem(`wrapper-${addedFoodID}`) != null){
+        while(localStorage.getItem(`wrapper-${addedFoodID}`) != null){
+            addedFoodID++;
+        }
+        wrapper.id = `wrapper-${addedFoodID}`; 
+        newFoodID = `${addedFoodID}`   
+    }
+    else{
+        wrapper.id = `wrapper-${addedFoodID}`; 
+        newFoodID = `${addedFoodID}`  
+    }
 
     // Create the collapsible div
     const collapsible = document.createElement('div');
@@ -174,12 +229,12 @@ let proteinPer100g = ((nutrientData?.totalNutrients?.PROCNT?.quantity?.toFixed(2
     // Create the input checkbox
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
-    checkbox.id = `food-${addedFoodID}`;
+    checkbox.id = `food-${newFoodID}`;
     checkbox.style.display = "none";
 
     // Create the label
     const label = document.createElement('label');
-    label.setAttribute('for', `food-${addedFoodID}`);
+    label.setAttribute('for', `food-${newFoodID}`);
     label.innerHTML = `${shortenName(name)} <p>${caloriesPer100g} kCal</p><img src="./resources/arrow.png">`;
 
     // Create the collapsible-text div
@@ -256,7 +311,8 @@ let proteinPer100g = ((nutrientData?.totalNutrients?.PROCNT?.quantity?.toFixed(2
     const closeButton = document.createElement('button');
     closeButton.className = 'close';
     closeButton.innerHTML = 'x';
-    closeButton.setAttribute("for", `wrapper-${addedFoodID}`);
+    (lS) ? closeButton.setAttribute("for", `${newFoodID}`) : closeButton.setAttribute("for", `wrapper-${newFoodID}`);
+    
     closeButton.addEventListener("click", removeWrapper);
 
     // Append the collapsible div and close button to the wrapper div
@@ -281,10 +337,15 @@ let proteinPer100g = ((nutrientData?.totalNutrients?.PROCNT?.quantity?.toFixed(2
 
     costInput.addEventListener('input', calculateTotal);
 
-    addedFoodID++;
+    if(!lS){
+        localStorage.setItem(`wrapper-${addedFoodID}`, searchInput + index);
+        addedFoodID++;
+    }
+    
     addedFoods.push(wrapper);
     buttons = document.querySelectorAll(".close");
     calculateTotal();
+
 }
 
 function calculateTotal(){
@@ -348,7 +409,7 @@ function calculateTotal(){
 function shortenName(str) {
     // Ensure the string is at least 26 characters long
     if (str.length <= 26) {
-        return str;
+        return str[0].toUpperCase() + str.slice(1);
     }
 
     // Find the last space before the 26th character
@@ -357,7 +418,7 @@ function shortenName(str) {
 
     // If there's no space before the 26th character, return the entire string
     if (lastSpaceIndex === -1) {
-        return str;
+        return str[0].toUpperCase() + str.slice(1);;
     }
 
     // Slice the string at the last space before the 26th character
@@ -387,7 +448,6 @@ $('.darkmode-checkbox').addEventListener('click', () => {
     const isDarkmode = document.body.classList.toggle('darkmode');
     const shadow = $('.moon-shadow');
     shadow.setAttribute('cx', isDarkmode ? '40' : '60');
-    console.log(isDarkmode ? "dark" : "light");
     
     const text = document.querySelectorAll(".darkerblue, .lighterblue");
     text.forEach(t => {

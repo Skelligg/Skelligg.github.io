@@ -54,41 +54,57 @@
                 <p class="darkerblue">Press Enter for search results</p>
             </div>  
 
-            <div class="added-foods">
+            <div id="pdf">
+
             
-            </div>
 
-            <div class="total">
+                <div class="added-foods">
+                
+                </div>
 
-                <div class="wrapper total" id="total-wrapper">
-                    <div class="collapsible">
-                        <input type="checkbox" id="total-head">
-                        <label for="total-head">Total 
-                            <p id="total-calories">0 kCal</p>
-                            <img src = "./resources/arrow.png">
-                        </label>
-                        
-                        <div class="collapsible-text">
-                            <div class="weight">
-                                <h3 darkerblue>Nutrition</h3> 
-                                <p id="total-weight">0 g</p>
-                            </div>
-                            <div class="nutrition">
-                                <p id="total-carbs">Carbs: 0 g</p>
-                                <p id="total-fiber">Fiber: 0 g</p>
-                                <p id="total-sugars">Total Sugars: 0 g</p>
-                                <p id="total-energy">Energy: 0 kJ</p>
-                                <p id="total-fat">Fat: 0 g</p>
-                                <p id="total-protein">Protein: 0 g</p>
-                                <p id="total-cost">Cost: 0.00</p>
+                <div class="total">
+
+                    <div class="wrapper total" id="total-wrapper">
+                        <div class="collapsible">
+                            <input type="checkbox" id="total-head">
+                            <label for="total-head">Total 
+                                <p id="total-calories">0 kCal</p>
+                                <img src = "./resources/arrow.png">
+                            </label>
+
+                            <div class="collapsible-text">
+                                <div class="weight">
+                                    <h3 class="darkerblue">Nutrition</h3> 
+                                    <p id="total-weight">0 g</p>
+                                </div>
+                                <div class="nutrition">
+                                    <p id="total-carbs">Carbs: 0 g</p>
+                                    <p id="total-fiber">Fiber: 0 g</p>
+                                    <p id="total-sugars">Total Sugars: 0 g</p>
+                                    <p id="total-energy">Energy: 0 kJ</p>
+                                    <p id="total-fat">Fat: 0 g</p>
+                                    <p id="total-protein">Protein: 0 g</p>
+                                    <p id="total-cost">Cost: 0.00</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
 
+        <button class="download">Download</button>
+
         </main>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script>
+            document.querySelector(".download").addEventListener('click', function() {
+                const toDl = document.querySelector("#pdf");
+                html2pdf().set({filename: "Calorie-Plan.pdf"}).from(toDl).save();
+            });
+                
+        </script>
     
     </body>
 </html>
